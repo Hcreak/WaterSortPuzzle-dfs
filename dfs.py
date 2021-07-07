@@ -17,9 +17,10 @@ y = y1+y2
 color = [65, 75, 78, 83, 92, 99, 130, 139, 151, 159, 177, 211]
 color_RGB = [(56, 46, 187, 255), (105, 47, 142, 255), (46, 99, 56, 255), (119, 76, 26, 255), (181, 57, 45, 255), (99, 100, 101, 255), (126, 149, 47, 255), (217, 103, 124, 255), (104, 161, 223, 255), (219, 144, 81, 255), (129, 211, 133, 255), (237, 219, 109, 255)]
 
-def Init(path):
+def Init(path="",image=""):
     # image = cv2.imread (path,0)
-    image = Image.open(path).convert('L')
+    if path:
+        image = Image.open(path).convert('L')
     for i in range(8):
         for j in range(7):
             vmi = j+(i>=4)*7
@@ -105,7 +106,7 @@ def dfs(deep):
     return False
 
 if __name__ == '__main__':
-    Init(path = "IMG_5162.PNG")
+    Init(path = "example/IMG_5162.PNG")
     print "Start: " + str(vm)
 
     dfs(0)
