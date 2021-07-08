@@ -39,31 +39,40 @@ def end():   # 遍历每个试管 判断颜色是否一致
     for vi in vm:
         if not oneCol(vi):
             return False
+
+    # 改进：加上判断是否有同一纯颜色的两个试管
+    vi_end_list = []
+    for vi in vm:
+        if len(vi) != 0:
+            if vi[0] in vi_end_list:
+                return False
+            else:
+                vi_end_list.append(vi[0])
     return True
 
 def canPour(i,j):
-    if i == j:
+    if i == j:    # 同一试管防呆
         return False
 
     si = len(vm[i])
     sj = len(vm[j])
-    if si == 0 or sj == SIZE:
+    if si == 0 or sj == SIZE:   # 源试管为空或目标试管满
         return False
-    if sj == 0:
-        return not oneCol(vm[i])
+    if sj == 0:                   # 若目标试管为空：
+        return not oneCol(vm[i])  # 源试管若已完成则没必要倒了 反之则可以用空试管倒腾 
 
     ci = vm[i][si-1]
     cj = vm[j][sj-1]
-    if ci != cj:
+    if ci != cj:   # 主要逻辑 源试管与目标试管栈尾颜色判断
         return False
-    num = 0
 
+    # 同一颜色色块是一起倒的 检出要倒的色块数量
+    num = 0
     # for like C language style, range NB 666! 
     for k in range(si-1, 0, -1):
         if vm[i][k] == ci:
             num += 1
-
-    return sj + num <= SIZE
+    return sj + num <= SIZE   # 检查目标试管剩余能否放下要倒的色块数
 
 def pour(i,j):   # 返回倒的块数(同颜色倒多块)
     x = 0

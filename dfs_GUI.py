@@ -98,8 +98,12 @@ def Open():
     Lcv.create_image(2,2,anchor=NW, image=PI)  # 2,2 What the Fuck?
 
     clear_vm()
+    del deep_list[:]     # Fix Bug
+    del visit[:]         # Fix Bug
     Init(image=image)
     print_rule()
+    Rcv.delete("ring")      # Fix Bug
+    Pb.configure(value=0)   # Fix Bug
     print_block()
 
     if dfs(0) == False:
