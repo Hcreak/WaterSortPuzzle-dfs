@@ -14,7 +14,7 @@ y1 = [ 444+i*64 for i in range(SIZE) ]
 y2 = [ 863+i*64 for i in range(SIZE) ]
 y = y1+y2
 # 深蓝 紫 深绿 棕 红 灰 浅绿 粉红 浅蓝 橙 翠绿 黄
-color = [65, 75, 78, 83, 92, 99, 130, 139, 151, 159, 177, 211]
+color = [65, 74, 78, 83, 92, 100, 130, 140, 151, 159, 178, 211]
 color_RGB = [(56, 46, 187, 255), (105, 47, 142, 255), (46, 99, 56, 255), (119, 76, 26, 255), (181, 57, 45, 255), (99, 100, 101, 255), (126, 149, 47, 255), (217, 103, 124, 255), (104, 161, 223, 255), (219, 144, 81, 255), (129, 211, 133, 255), (237, 219, 109, 255)]
 
 def Init(path="",image=""):
@@ -26,8 +26,12 @@ def Init(path="",image=""):
             vmi = j+(i>=4)*7
             # c = image[x[i],y[j]]
             c = image.getpixel((x[j],y[i]))
-            if c in color:
-                vm[vmi].insert(0, c)
+
+            # 颜色模糊
+            for n in range(c-1,c+2):
+                if n in color:
+                    vm[vmi].insert(0, n)
+                    break
 
 def oneCol(vi):   # 判断单个试管中颜色是否一致
     for i in range(len(vi)):
@@ -115,37 +119,41 @@ def dfs(deep):
     return False
 
 if __name__ == '__main__':
-    Init(path = "example/IMG_5162.PNG")
-    print "Start: " + str(vm)
+    # Init(path = "example/IMG_5162.PNG")
+    # print "Start: " + str(vm)
 
-    dfs(0)
-    for deep in range(len(deep_list)):
-        i = deep_list[deep][0]
-        j = deep_list[deep][1]
-        print "deep = " + str(deep) + " from " + str(i) + " to " + str(j)
+    # dfs(0)
+    # for deep in range(len(deep_list)):
+    #     i = deep_list[deep][0]
+    #     j = deep_list[deep][1]
+    #     print "deep = " + str(deep) + " from " + str(i) + " to " + str(j)
 
-    print "End: " + str(vm)
+    # print "End: " + str(vm)
 
-    # path = "IMG_5160.PNG"
-    # # image = Image.open(path).convert('L')
+    path = "1337.jpg"
+    image = Image.open(path).convert('L')
     # image = Image.open(path)
 
-    # m = {}
-    # for i in x:
-    #     for j in y:
-    #         c = image.getpixel((i,j))
-    #         if m.has_key(c):
-    #             m[c] += 1
-    #         else:
-    #             m[c] = 1
+    m = {}
+    for i in x:
+        for j in y:
+            c = image.getpixel((i,j))
 
-    # for k,v in m.items():
-    #     print str(k) + '\t' + str(v)
+            # 颜色模糊
+            for n in range(c-1,c+2):
+                if m.has_key(n):
+                    m[n] += 1
+                    break
+            else:
+                m[c] = 1
 
-    # for k,v in m.items():
-    #     if v != 4:
-    #         del m[k]
-    # print len(m)
+    for k,v in m.items():
+        print str(k) + '\t' + str(v)
+
+    for k,v in m.items():
+        if v != 4:
+            del m[k]
+    print len(m)
 
     # # cl = m.keys()
     # # cl.sort()
@@ -171,4 +179,4 @@ if __name__ == '__main__':
     #     draw.rectangle([(x0, 0), (x1, 60)], fill=cl[i])
     
     # image.show()
-    # # image.save('code.jpg', 'jpeg')
+    # image.save('code.jpg', 'jpeg')
