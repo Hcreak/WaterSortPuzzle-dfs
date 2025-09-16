@@ -2,14 +2,14 @@
 
 from dfs import *
 
-from tkinter import *
+from Tkinter import *
 from PIL import Image,ImageTk
-import tkinter.filedialog
-import tkinter.messagebox
-import tkinter.ttk
+import tkFileDialog
+import tkMessageBox
+import ttk
 from threading import Timer
 
-Scale = 0.25  # 图片显示缩放倍数
+Scale = 0.5  # 图片显示缩放倍数
 
 # 4元素RGBA值转十六进制字符串
 color_Hex = []
@@ -27,7 +27,7 @@ root.resizable(False, False)
 root.geometry("1065x775")
 root.title('dfs_GUI')
 
-Lcv = Canvas(root,bg='black',width=1170*Scale,height=2532*Scale)
+Lcv = Canvas(root,bg='black',width=750*Scale,height=1334*Scale)
 Lcv.grid(row=0,column=0,padx=20,pady=15)
 
 BF = Frame(root)
@@ -44,16 +44,16 @@ Rcv.grid(row=0,column=1,padx=20,pady=15)
 
 BP = Frame(root)
 BP.grid(row=1,column=1)
-Pb = tkinter.ttk.Progressbar(BP, length=600, mode="determinate",maximum=100,orient=HORIZONTAL)
+Pb = ttk.Progressbar(BP, length=600, mode="determinate",maximum=100,orient=HORIZONTAL)
 Pl = Label(BP, text="", font=("Arial", 20))
 Pl.pack()
 Pb.pack()
 
 def print_rule():
     for xl in x:
-        Lcv.create_line(xl*Scale,0,xl*Scale,2532*Scale,fill="white")
+        Lcv.create_line(xl*Scale,0,xl*Scale,1334*Scale,fill="white")
     for yl in y:
-        Lcv.create_line(0,yl*Scale,1170*Scale,yl*Scale,fill="white")
+        Lcv.create_line(0,yl*Scale,750*Scale,yl*Scale,fill="white")
 
 def print_block():
     Rcv.delete("block")
@@ -86,14 +86,13 @@ def update_PbPl():
     Pl.configure(text="{}/{}".format(cur_deep,deep_sum))
 
 def Open():
-    select = tkinter.filedialog.askopenfilenames(filetypes=[("PNG","*.png"),("JPEG","*.jpg;*.jpeg")])
+    select = tkFileDialog.askopenfilenames(filetypes=[("PNG","*.png"),("JPEG","*.jpg;*.jpeg")])
     if len(select) == 0:
         return
     path = select[0]
     
     image = Image.open(path).convert('L')
-    # image_display = image.resize((int(750*Scale), int(1334*Scale)),Image.ANTIALIAS)  # 带滤镜缩放 防止失真
-    image_display = image.resize((int(1170*Scale), int(2532*Scale)),Image.LANCZOS)
+    image_display = image.resize((int(750*Scale), int(1334*Scale)),Image.ANTIALIAS)  # 带滤镜缩放 防止失真
     global PI   # Tk Canvas Bug : https://blog.csdn.net/u011320646/article/details/12845761
     PI = ImageTk.PhotoImage(image_display)
     Lcv.create_image(2,2,anchor=NW, image=PI)  # 2,2 What the Fuck?
@@ -108,7 +107,7 @@ def Open():
     print_block()
 
     if dfs(0) == False:
-        tkinter.messagebox.showerror('GG','You Dead')
+        tkMessageBox.showerror('GG','You Dead')
         B_run.config(state=DISABLED)
         B_step.config(state=DISABLED)
         return
